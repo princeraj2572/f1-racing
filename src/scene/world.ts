@@ -157,13 +157,13 @@ export function createWorld({ library, curve, quality, track = TRACK }: WorldOpt
   // Barriers along both sides, alternating red and white
   const red: Matrix4[] = [];
   const white: Matrix4[] = [];
-  const barrierStep = quality === 'high' ? 0.9 : 1.6;
+  const barrierStep = quality === 'high' ? 0.27 : 0.54;
   const barrierSize = propFrame(library.get('barrierRed')).size;
   const count = Math.floor(lap / barrierStep);
   for (let i = 0; i < count; i++) {
     const { p, tangent, right } = frameAt(i / count);
     for (const side of [1, -1]) {
-      const at = p.clone().addScaledVector(right, side * 0.66);
+      const at = p.clone().addScaledVector(right, side * 0.47);
       ((i + (side > 0 ? 1 : 0)) % 2 === 0 ? red : white).push(place(at, tangent, barrierSize));
     }
   }
@@ -188,16 +188,8 @@ export function createWorld({ library, curve, quality, track = TRACK }: WorldOpt
   addProp('grandStand', stands);
   addProp('grandStandCovered', covered);
 
-  // Pit garages and flags beside the start line, on the inside of the loop
+  // Start line flags
   const start = spans[TRACK_ANCHORS.startLine];
-  const garages: Matrix4[] = [];
-  const garageSize = propFrame(library.get('pitsGarage')).size;
-  for (let i = 0; i < 2; i++) {
-    const t = (start?.start ?? 0) + ((start?.end ?? 0.1) - (start?.start ?? 0)) * (0.2 + i * 0.5);
-    const { p, tangent, right } = frameAt(t);
-    garages.push(place(p.clone().addScaledVector(right, 1.1), tangent, garageSize, 0));
-  }
-  addProp('pitsGarage', garages);
   const flagSize = propFrame(library.get('flagCheckers')).size;
   addProp('flagCheckers', [
     place(
@@ -207,12 +199,11 @@ export function createWorld({ library, curve, quality, track = TRACK }: WorldOpt
     ),
   ]);
 
-  // Scatter trees, tents, billboards and light posts away from the road
+  // Scatter trees, tents and light posts away from the road
   const rand = mulberry32(2027);
   const trees: Matrix4[] = [];
   const bigTrees: Matrix4[] = [];
   const tents: Matrix4[] = [];
-  const billboards: Matrix4[] = [];
   const pylons: Matrix4[] = [];
   const lamps: Matrix4[] = [];
   const treeTarget = quality === 'high' ? 90 : 30;
@@ -233,14 +224,12 @@ export function createWorld({ library, curve, quality, track = TRACK }: WorldOpt
 
   if (quality === 'high') {
     const tentSize = propFrame(library.get('tent')).size;
-    const boardSize = propFrame(library.get('billboard')).size;
     const lampSize = propFrame(library.get('lightPostLarge')).size;
     const pylonSize = propFrame(library.get('pylon')).size;
-    for (let i = 0; i < 4; i++) {
-      const t = 0.1 + i * 0.22;
+    // Tents sit outside the loop, away from the grandstands on the back straight
+    for (const t of [0.13, 0.33, 0.52, 0.95]) {
       const { p, tangent, right } = frameAt(t);
-      tents.push(place(p.clone().addScaledVector(right, 2.1), tangent, tentSize));
-      billboards.push(place(p.clone().addScaledVector(right, -2.2), tangent, boardSize, Math.PI));
+      tents.push(place(p.clone().addScaledVector(right, -2.3), tangent, tentSize));
     }
     for (let i = 0; i < 10; i++) {
       const { p, tangent, right } = frameAt(i / 10 + 0.03);
@@ -248,7 +237,6 @@ export function createWorld({ library, curve, quality, track = TRACK }: WorldOpt
       pylons.push(place(p.clone().addScaledVector(right, 0.8), tangent, pylonSize));
     }
     addProp('tent', tents);
-    addProp('billboard', billboards);
     addProp('lightPostLarge', lamps);
     addProp('pylon', pylons);
   }

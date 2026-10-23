@@ -25,10 +25,8 @@ export const PROP_MODELS = [
   'treeSmall',
   'treeLarge',
   'tent',
-  'billboard',
   'pylon',
   'fenceStraight',
-  'pitsGarage',
 ] as const;
 export type PropModel = (typeof PROP_MODELS)[number];
 
