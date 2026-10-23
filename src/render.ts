@@ -1,9 +1,9 @@
 // Builds the page markup from src/content.ts and src/track.ts. It runs at build time (see
 // vite.config.ts) so every word is real HTML before any script runs.
-import { CHAPTER_ORDER, SAMPLE_NOTE, content as defaultContent } from './content';
-import type { Content } from './content';
-import { TRACK, tileWaypoints } from './track';
-import type { TilePlacement } from './track';
+import { CHAPTER_ORDER, SAMPLE_NOTE, content as defaultContent } from './content.ts';
+import type { Content } from './content.ts';
+import { TRACK, tileWaypoints } from './track.ts';
+import type { TilePlacement } from './track.ts';
 
 const ENTITIES: Record<string, string> = {
   '&': '&amp;',

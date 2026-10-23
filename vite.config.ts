@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import type { Plugin } from 'vite';
-import { SAMPLE_NOTE } from './src/content';
-import { renderChapters, renderFooter, renderMeta, renderNav } from './src/render';
+import { SAMPLE_NOTE } from './src/content.ts';
+import { renderChapters, renderFooter, renderMeta, renderNav } from './src/render.ts';
 
 /** Fills index.html from src/content.ts and src/track.ts so the page is real HTML before JS runs. */
 function eventPage(): Plugin {
