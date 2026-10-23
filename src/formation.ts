@@ -13,17 +13,17 @@ export interface Slot {
 /** Four cars driving in a loose convoy along the back straight. */
 const CONVOY: readonly Pick<Slot, 'dt' | 'lane'>[] = [
   { dt: 0, lane: 0 },
-  { dt: 0.06, lane: 0.24 },
-  { dt: -0.06, lane: -0.24 },
-  { dt: -0.12, lane: 0.24 },
+  { dt: 0.07, lane: 0.16 },
+  { dt: -0.07, lane: -0.16 },
+  { dt: -0.14, lane: 0.16 },
 ];
 
 /** Two-by-two grid, hero on the front row. */
 const GRID: readonly Pick<Slot, 'dt' | 'lane'>[] = [
-  { dt: 0, lane: -0.26 },
-  { dt: 0, lane: 0.26 },
-  { dt: -0.052, lane: -0.26 },
-  { dt: -0.052, lane: 0.26 },
+  { dt: 0, lane: -0.17 },
+  { dt: 0, lane: 0.17 },
+  { dt: -0.045, lane: -0.17 },
+  { dt: -0.045, lane: 0.17 },
 ];
 
 export const FIELD_SIZE = CONVOY.length;

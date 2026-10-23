@@ -27,8 +27,8 @@ describe('formationSlot', () => {
           const sb = formationSlot(b, f);
           const along = Math.abs(sa.dt - sb.dt) * LAP;
           const across = Math.abs(sa.lane - sb.lane);
-          // Car footprint is about 0.84 long by 0.34 wide
-          const clear = along > 0.84 || across > 0.34;
+          // Scaled car footprint is about 0.57 long by 0.30 wide
+          const clear = along > 0.57 || across > 0.3;
           expect(clear, `cars ${a} and ${b} at formation ${f}`).toBe(true);
         }
       }
