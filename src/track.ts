@@ -40,19 +40,19 @@ export const TILE_DEFS: Record<TileName, TileDef> = {
   roadCornerLarger: { kind: 'corner', width: 3, height: 3, modelOffsetX: 0 },
 };
 
-// Sample circuit: one start/finish straight, a long back straight, four right-hand corners
-// (wide, medium, tight, medium). Tile 0 is the start line.
+// Sample circuit, clockwise: start/finish straight, a tight first corner, a long back straight,
+// a wide sweeper into a medium corner (the double bend), a second straight, then a medium corner
+// back onto the start line. Tile 0 is the start line.
 export const TRACK: readonly TilePlacement[] = [
-  { tile: 'roadStart', row: 3, col: 0, rotation: 0 },
-  { tile: 'roadCornerLarger', row: 0, col: 0, rotation: 0 },
-  { tile: 'roadStraight', row: 0, col: 3, rotation: 1 },
-  { tile: 'roadCornerLarge', row: 0, col: 4, rotation: 1 },
-  { tile: 'roadStraightLong', row: 2, col: 5, rotation: 2 },
-  { tile: 'roadStraightLong', row: 4, col: 5, rotation: 2 },
-  { tile: 'roadCornerSmall', row: 6, col: 5, rotation: 2 },
-  { tile: 'roadStraightLong', row: 6, col: 3, rotation: 3 },
-  { tile: 'roadStraight', row: 6, col: 2, rotation: 3 },
-  { tile: 'roadCornerLarge', row: 5, col: 0, rotation: 3 },
+  { tile: 'roadStart', row: 1, col: 0, rotation: 0 },
+  { tile: 'roadCornerSmall', row: 0, col: 0, rotation: 0 },
+  { tile: 'roadStraightLong', row: 0, col: 1, rotation: 1 },
+  { tile: 'roadStraightLong', row: 0, col: 3, rotation: 1 },
+  { tile: 'roadCornerLarger', row: 0, col: 5, rotation: 1 },
+  { tile: 'roadCornerLarge', row: 3, col: 6, rotation: 2 },
+  { tile: 'roadStraightLong', row: 4, col: 4, rotation: 3 },
+  { tile: 'roadStraightLong', row: 4, col: 2, rotation: 3 },
+  { tile: 'roadCornerLarge', row: 3, col: 0, rotation: 3 },
 ];
 
 export interface Vec2 {
