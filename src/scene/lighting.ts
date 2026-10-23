@@ -15,7 +15,7 @@ import type { Scene } from 'three';
 import type { SkyMood } from '../sky';
 import type { Quality } from './world';
 
-const SUN_AZIMUTH = MathUtils.degToRad(235);
+const SUN_AZIMUTH = MathUtils.degToRad(25);
 
 const rgb = (c: readonly [number, number, number]): Color =>
   new Color().setRGB(c[0], c[1], c[2], SRGBColorSpace);
