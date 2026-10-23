@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   chapterCoord,
   chapterStart,
+  progressFromCoord,
   createCameraPath,
   monotone,
   type Pose,
@@ -47,6 +48,19 @@ describe('chapterCoord', () => {
       expect(c).toBeGreaterThanOrEqual(last);
       last = c;
     }
+  });
+});
+
+describe('progressFromCoord', () => {
+  it('round-trips with chapterCoord', () => {
+    for (let c = 0; c <= weights.length; c += 0.125) {
+      expect(chapterCoord(progressFromCoord(c, weights), weights)).toBeCloseTo(c, 9);
+    }
+  });
+
+  it('clamps to the ends', () => {
+    expect(progressFromCoord(-1, weights)).toBe(0);
+    expect(progressFromCoord(99, weights)).toBeCloseTo(1, 10);
   });
 });
 

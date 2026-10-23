@@ -60,6 +60,17 @@ export function chapterCoord(progress: number, weights: readonly number[]): numb
   return weights.length;
 }
 
+/** Inverse of chapterCoord: the progress value for a chapter coordinate such as 2.5. */
+export function progressFromCoord(coord: number, weights: readonly number[]): number {
+  const total = weights.reduce((a, b) => a + b, 0);
+  if (weights.length === 0 || total <= 0) return 0;
+  const c = Math.min(weights.length, Math.max(0, coord));
+  const i = Math.min(weights.length - 1, Math.floor(c));
+  let before = 0;
+  for (let k = 0; k < i; k++) before += weights[k] ?? 0;
+  return (before + (c - i) * (weights[i] ?? 0)) / total;
+}
+
 /** Progress at which chapter i starts. */
 export function chapterStart(i: number, weights: readonly number[]): number {
   const total = weights.reduce((a, b) => a + b, 0);
