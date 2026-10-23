@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "optimise:models": "node scripts/optimise-models.mjs"
+    "optimise:models": "node scripts/optimise-models.mjs",
+    "capture": "node scripts/capture-stills.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
