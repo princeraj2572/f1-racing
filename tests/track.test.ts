@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TRACK, TILE_DEFS, tilePorts, tileSpans, validateTrack } from '../src/track';
+import { TRACK, TRACK_ANCHORS, TILE_DEFS, tilePorts, tileSpans, validateTrack } from '../src/track';
 
 function must<T>(value: T | undefined): T {
   if (value === undefined) throw new Error('expected a value');
@@ -51,5 +51,31 @@ describe('track layout', () => {
     expect(spans.at(-1)?.end).toBeCloseTo(1, 10);
     for (let i = 1; i < spans.length; i++)
       expect(must(spans[i]).start).toBeCloseTo(must(spans[i - 1]).end, 10);
+  });
+});
+
+describe('track anchors', () => {
+  const kindAt = (i: number) => TILE_DEFS[must(TRACK[i]).tile].kind;
+
+  it('points at tiles of the expected kind', () => {
+    expect(TRACK_ANCHORS.startLine).toBe(0);
+    expect(kindAt(TRACK_ANCHORS.corner1)).toBe('corner');
+    expect(kindAt(TRACK_ANCHORS.finalCorner)).toBe('corner');
+    for (const i of TRACK_ANCHORS.straight) expect(kindAt(i)).toBe('straight');
+    for (const i of TRACK_ANCHORS.backStraight) expect(kindAt(i)).toBe('straight');
+    for (const i of TRACK_ANCHORS.doubleBend) expect(kindAt(i)).toBe('corner');
+  });
+
+  it('lists anchors in driving order', () => {
+    const order = [
+      TRACK_ANCHORS.startLine,
+      TRACK_ANCHORS.corner1,
+      ...TRACK_ANCHORS.straight,
+      ...TRACK_ANCHORS.doubleBend,
+      ...TRACK_ANCHORS.backStraight,
+      TRACK_ANCHORS.finalCorner,
+    ];
+    expect(order).toEqual([...order].sort((a, b) => a - b));
+    expect(order.every((i) => i < TRACK.length)).toBe(true);
   });
 });

@@ -208,3 +208,24 @@ export function tileSpans(track: readonly TilePlacement[] = TRACK): TileSpan[] {
     return { index, tile: t.tile, kind: TILE_DEFS[t.tile].kind, start, end: run / total };
   });
 }
+
+/**
+ * Tile indices that the story chapters attach to. Update these when the layout above changes;
+ * the tests check that they point at tiles of the right kind.
+ */
+export const TRACK_ANCHORS = {
+  /** Tile that holds the start line. */
+  startLine: 0,
+  /** The first corner after the start line (chapter 3). */
+  corner1: 1,
+  /** Straight tiles for the speed chapter (chapter 4), in driving order. */
+  straight: [2, 3],
+  /** Corner tiles for the schedule chapter (chapter 5), in driving order. */
+  doubleBend: [4, 5],
+  /** Straight tiles that carry the teams chapter (chapter 6), in driving order. */
+  backStraight: [6, 7],
+  /** Last corner before the start line. */
+  finalCorner: 8,
+} as const;
+
+export type TrackAnchors = typeof TRACK_ANCHORS;
