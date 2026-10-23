@@ -21,8 +21,8 @@ import type { ModelLibrary } from './models';
 import { createWorld } from './world';
 import type { Quality, World } from './world';
 
-/** The kit cars are a little big for its road; scale them so two fit side by side. */
-const CAR_SCALE = 0.62;
+/** The kit cars are about as wide as its road; scale them down so two fit side by side. */
+const CAR_SCALE = 0.42;
 const teams = content.chapters.teams.teams;
 
 export interface StageOptions {
@@ -110,6 +110,16 @@ export class Stage {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, cap));
     this.renderer.setSize(this.width, this.height, false);
     this.camera.aspect = this.width / this.height;
+    // Push the picture away from the text: right on wide screens, up on portrait ones
+    const wide = this.camera.aspect > 1.1;
+    this.camera.setViewOffset(
+      this.width,
+      this.height,
+      wide ? -this.width * 0.14 : 0,
+      wide ? 0 : this.height * 0.12,
+      this.width,
+      this.height,
+    );
     this.lastFov = 0;
     this.dirty = true;
   }
