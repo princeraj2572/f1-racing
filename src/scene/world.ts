@@ -193,7 +193,7 @@ export function createWorld({ library, curve, quality, track = TRACK }: WorldOpt
   const flagSize = propFrame(library.get('flagCheckers')).size;
   addProp('flagCheckers', [
     place(
-      frameAt((start?.start ?? 0) + 0.015).p.addScaledVector(frameAt(0.015).right, -0.85),
+      frameAt((start?.start ?? 0) + 0.015).p.addScaledVector(frameAt(0.015).right, 0.85),
       frameAt(0.015).tangent,
       flagSize,
     ),
