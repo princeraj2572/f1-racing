@@ -71,7 +71,7 @@ export class Stage {
     });
     this.renderer.outputColorSpace = SRGBColorSpace;
     this.renderer.toneMapping = ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.05;
+    this.renderer.toneMappingExposure = 1.15;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = PCFShadowMap;
 
@@ -116,7 +116,7 @@ export class Stage {
       this.width,
       this.height,
       wide ? -this.width * 0.14 : 0,
-      wide ? 0 : this.height * 0.12,
+      wide ? 0 : this.height * 0.26,
       this.width,
       this.height,
     );
