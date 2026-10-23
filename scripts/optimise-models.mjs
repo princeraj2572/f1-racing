@@ -35,10 +35,8 @@ const PROPS = [
   'treeSmall',
   'treeLarge',
   'tent',
-  'billboard',
   'pylon',
   'fenceStraight',
-  'pitsGarage',
 ];
 const WANTED = [...TILES, ...CARS, ...PROPS];
 
