@@ -195,6 +195,7 @@ export function buildStops(spans: readonly TileSpan[], anchors: TrackAnchors): S
   const bsOut = at(lastOf(anchors.backStraight), 0.95);
   const finalMid = at(anchors.finalCorner, 0.5);
   const finalOut = at(anchors.finalCorner, 1);
+  const grid = 1 + at(anchors.startLine, 0.8);
 
   return [
     // 0 Hero: low behind the car on the grid
@@ -422,7 +423,7 @@ export function buildStops(spans: readonly TileSpan[], anchors: TrackAnchors): S
       fov: 46,
       sky: 0.82,
       speed: 0.4,
-      formation: 0,
+      formation: 1,
     },
     {
       ...chase,
@@ -442,7 +443,7 @@ export function buildStops(spans: readonly TileSpan[], anchors: TrackAnchors): S
       ...chase,
       ...base,
       at: 7.4,
-      carT: 1,
+      carT: grid,
       back: -0.5,
       side: 2.4,
       height: 1.2,
@@ -456,7 +457,7 @@ export function buildStops(spans: readonly TileSpan[], anchors: TrackAnchors): S
       ...chase,
       ...base,
       at: 8.0,
-      carT: 1,
+      carT: grid,
       top: 1,
       topHeight: 5.2,
       topFocus: 1,
@@ -543,7 +544,7 @@ export function createCameraPath(options: CameraPathOptions): CameraPath {
       },
       fov: v.fov,
       roll: v.roll,
-      carT: clamp01(v.carT),
+      carT: Math.min(2, Math.max(0, v.carT)),
       sky: clamp01(v.sky),
       speed: clamp01(v.speed),
       formation: Math.min(2, Math.max(0, v.formation)),

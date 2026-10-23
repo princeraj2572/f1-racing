@@ -118,6 +118,12 @@ describe('camera pose at key scroll values', () => {
     expect(late.speed).toBeGreaterThan(0.8);
   });
 
+  it('parks the hero just past the start line for the grid line-up', () => {
+    const pose = path.poseAt(1);
+    expect(pose.carT).toBeGreaterThan(1);
+    expect(pose.carT).toBeLessThan(1.11);
+  });
+
   it('shows the field of cars on the back straight during the teams chapter', () => {
     const start = chapterStart(5, weights);
     const end = chapterStart(6, weights);
