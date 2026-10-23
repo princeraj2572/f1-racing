@@ -543,7 +543,7 @@ export function createCameraPath(options: CameraPathOptions): CameraPath {
       },
       fov: v.fov,
       roll: v.roll,
-      carT: wrap01(v.carT),
+      carT: clamp01(v.carT),
       sky: clamp01(v.sky),
       speed: clamp01(v.speed),
       formation: Math.min(2, Math.max(0, v.formation)),
