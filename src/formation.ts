@@ -14,8 +14,8 @@ export interface Slot {
 const CONVOY: readonly Pick<Slot, 'dt' | 'lane'>[] = [
   { dt: 0, lane: 0 },
   { dt: 0.06, lane: 0.24 },
-  { dt: 0.12, lane: -0.24 },
-  { dt: -0.06, lane: 0.24 },
+  { dt: -0.06, lane: -0.24 },
+  { dt: -0.12, lane: 0.24 },
 ];
 
 /** Two-by-two grid, hero on the front row. */
