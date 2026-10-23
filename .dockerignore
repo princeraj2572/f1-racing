@@ -1,0 +1,8 @@
+node_modules
+dist
+assets-src
+.model-work
+screenshots
+test-results
+playwright-report
+.git
