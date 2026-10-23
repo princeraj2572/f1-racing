@@ -402,7 +402,7 @@ img {
 }
 .countdown__value {
   display: flex;
-  gap: var(--space-5);
+  gap: var(--space-4) var(--space-5);
   flex-wrap: wrap;
 }
 .countdown__cell {
@@ -411,7 +411,7 @@ img {
 .countdown__cell b {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: var(--step-4);
+  font-size: var(--step-3);
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -530,7 +530,7 @@ img {
 .ticket__price b {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: var(--step-3);
+  font-size: var(--step-2);
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -741,9 +741,20 @@ img {
     background: linear-gradient(0deg, var(--scrim) 0%, var(--scrim-soft) 55%, transparent 80%);
   }
   .track-nav {
-    top: auto;
-    bottom: var(--space-4);
+    top: 3.4rem;
     transform: none;
+  }
+  .sample-note {
+    max-width: calc(100vw - 2 * var(--gutter) - var(--nav-width));
+  }
+  .display--hero {
+    font-size: clamp(3.4rem, 17vw, 5.2rem);
+  }
+  .display--hero .display__line {
+    display: inline;
+  }
+  .meta {
+    gap: var(--space-2) var(--space-5);
   }
   .tickets {
     grid-template-columns: 1fr;
