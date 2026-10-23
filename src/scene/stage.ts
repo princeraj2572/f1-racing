@@ -106,7 +106,7 @@ export class Stage {
   resize(width: number, height: number): void {
     this.width = Math.max(1, width);
     this.height = Math.max(1, height);
-    const cap = this.quality === 'high' ? 2 : 1.25;
+    const cap = this.quality === 'high' ? 2 : 1;
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, cap));
     this.renderer.setSize(this.width, this.height, false);
     this.camera.aspect = this.width / this.height;
