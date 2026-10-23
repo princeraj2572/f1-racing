@@ -641,7 +641,6 @@ img {
   top: 50%;
   z-index: var(--z-nav);
   width: var(--nav-width);
-  aspect-ratio: 8.2 / 5.2;
   transform: translateY(-50%);
 }
 .track-nav__svg {

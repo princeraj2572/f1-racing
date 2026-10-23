@@ -27,7 +27,7 @@ export function formatInr(amount: number): string {
 export function trackOutline(
   track: readonly TilePlacement[] = TRACK,
   arcSteps = 8,
-): { d: string; viewBox: string } {
+): { d: string; viewBox: string; width: number; height: number } {
   const points = track.flatMap((tile) => tileWaypoints(tile, arcSteps).slice(0, -1));
   const xs = points.map((p) => p.x);
   const zs = points.map((p) => p.z);
@@ -38,7 +38,7 @@ export function trackOutline(
   const height = Math.max(...zs) + pad - minZ;
   const r = (n: number): string => n.toFixed(3).replace(/\.?0+$/, '');
   const d = `${points.map((p, i) => `${i === 0 ? 'M' : 'L'}${r(p.x)} ${r(p.z)}`).join(' ')} Z`;
-  return { d, viewBox: `${r(minX)} ${r(minZ)} ${r(width)} ${r(height)}` };
+  return { d, viewBox: `${r(minX)} ${r(minZ)} ${r(width)} ${r(height)}`, width, height };
 }
 
 /** Where chapter markers sit on the outline: evenly spaced round the lap, in driving order. */
@@ -73,13 +73,13 @@ export function renderMeta(c: Content = defaultContent): string {
 }
 
 export function renderNav(c: Content = defaultContent): string {
-  const { d, viewBox } = trackOutline();
+  const { d, viewBox, width, height } = trackOutline();
   const fractions = markerFractions(CHAPTER_ORDER.length);
   const items = CHAPTER_ORDER.map((id, i) => {
     const ch = c.chapters[id];
     return `<li><a class="track-nav__marker" href="#${id}" data-chapter-link="${i}" data-fraction="${fractions[i]?.toFixed(5)}" aria-label="Chapter ${i + 1}: ${esc(ch.nav)}"><span class="track-nav__label">${esc(ch.nav)}</span></a></li>`;
   }).join('\n          ');
-  return `<nav class="track-nav" aria-label="Chapters">
+  return `<nav class="track-nav" aria-label="Chapters" style="aspect-ratio:${width.toFixed(3)} / ${height.toFixed(3)}">
       <svg class="track-nav__svg" viewBox="${viewBox}" aria-hidden="true" focusable="false">
         <path class="track-nav__road" d="${d}" pathLength="1" />
         <path class="track-nav__progress" d="${d}" pathLength="1" />
