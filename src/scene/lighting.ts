@@ -64,7 +64,7 @@ export function createLighting(scene: Scene, quality: Quality): Lighting {
 
   const sun = new DirectionalLight(0xffffff, 3);
   sun.castShadow = true;
-  const size = quality === 'high' ? 2048 : 1024;
+  const size = quality === 'high' ? 2048 : 512;
   sun.shadow.mapSize.set(size, size);
   sun.shadow.camera.near = 1;
   sun.shadow.camera.far = 90;
