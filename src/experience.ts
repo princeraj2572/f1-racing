@@ -1,4 +1,6 @@
 import gsap from 'gsap';
+import { createDriveInput, stepDrive } from './drive';
+import type { DriveState } from './drive';
 import { createCameraPath, progressFromCoord } from './cameraPath';
 import { initChapterAnimations } from './chapters';
 import { CHAPTER_ORDER, content } from './content';
@@ -99,7 +101,39 @@ export async function startFullExperience(quality: 'high' | 'low'): Promise<void
     updateActive();
   }).observe(canvas);
 
-  gsap.ticker.add((_time, deltaMs) => stage.tick(deltaMs / 1000));
+  // Drive mode: freeze the scroll story and hand the car to the keyboard
+  const driveBtn = $<HTMLButtonElement>('#drive');
+  let drive: DriveState | null = null;
+  const input = createDriveInput();
+  const setDrive = (on: boolean): void => {
+    drive = on ? stage.startState() : null;
+    if (drive) stage.snapChase(drive);
+    root.classList.toggle('is-driving', on);
+    if (on) rig.lenis.stop();
+    else rig.lenis.start();
+    stage.setDriving(on);
+    const label = driveBtn?.querySelector('span');
+    if (label) label.textContent = on ? 'Exit' : 'Drive';
+  };
+  if (driveBtn) {
+    driveBtn.hidden = false;
+    driveBtn.addEventListener('click', () => setDrive(!drive));
+  }
+  window.addEventListener('keydown', (event) => {
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    const target = event.target;
+    if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
+    if (event.key.toLowerCase() === 'g') setDrive(!drive);
+    if (event.key === 'Escape' && drive) setDrive(false);
+  });
+
+  gsap.ticker.add((_time, deltaMs) => {
+    const dt = deltaMs / 1000;
+    if (!drive) return stage.tick(dt);
+    const step = Math.min(dt, 0.05);
+    drive = stepDrive(drive, input.read(), step, stage.distanceToRoad(drive.x, drive.z) > 0.45);
+    stage.driveTick(drive, step);
+  });
 
   const hash = decodeURIComponent(location.hash.slice(1));
   const hashIndex = CHAPTER_ORDER.findIndex((id) => id === hash);
@@ -128,6 +162,7 @@ export async function startFullExperience(quality: 'high' | 'low'): Promise<void
   const teardown = (): void => {
     animations.revert();
     rig.destroy();
+    input.destroy();
     stage.dispose();
     library.dispose();
   };

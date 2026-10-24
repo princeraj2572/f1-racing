@@ -841,3 +841,58 @@ img {
     opacity: 0;
   }
 }
+
+/* ---------- drive mode ---------- */
+.drive-btn {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: var(--z-top);
+  padding: 0.6rem 1rem;
+  border: 1px solid currentcolor;
+  background: rgb(11 11 13 / 0.7);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.is-driving main,
+.is-driving .footer,
+.is-driving .track-nav,
+.is-driving .vignette,
+.is-driving .sample-note {
+  visibility: hidden;
+}
+
+.drive-pad {
+  display: none;
+  position: fixed;
+  inset: auto 1rem 4.5rem;
+  z-index: var(--z-top);
+  justify-content: space-between;
+  align-items: flex-end;
+  touch-action: none;
+  user-select: none;
+}
+
+.drive-pad > div {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.drive-pad button {
+  min-width: 4.5rem;
+  min-height: 4.5rem;
+  border: 1px solid currentcolor;
+  border-radius: 50%;
+  background: rgb(11 11 13 / 0.6);
+  color: inherit;
+  font: inherit;
+  touch-action: none;
+}
+
+@media (pointer: coarse) {
+  .is-driving .drive-pad {
+    display: flex;
+  }
+}

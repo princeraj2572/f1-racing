@@ -11,6 +11,7 @@ import {
 import type { CatmullRomCurve3 } from 'three';
 import type { CameraPath } from '../cameraPath';
 import { content } from '../content';
+import type { DriveState } from '../drive';
 import { FIELD_SIZE, formationSlot } from '../formation';
 import { skyMood } from '../sky';
 import { createCar } from './car';
@@ -57,6 +58,9 @@ export class Stage {
   private lastFov = 0;
   private readonly focus = new Vector3();
   private readonly lookAt = new Vector3();
+  private driving = false;
+  private driveSky = 0;
+  private readonly chase = new Vector3();
 
   constructor({ canvas, library, curve, path, quality, calm = false }: StageOptions) {
     this.curve = curve;
@@ -98,6 +102,58 @@ export class Stage {
     this.dirty = true;
   }
 
+  /** Hands the hero car and camera to the player. Pass null to go back to the scroll story. */
+  setDriving(on: boolean): void {
+    this.driving = on;
+    this.driveSky = this.path.poseAt(this.current).sky;
+    this.cars.forEach((c, i) => (c.object.visible = !on || i === 0));
+    if (on) this.camera.clearViewOffset();
+    else this.resize(this.width, this.height);
+    this.dirty = true;
+  }
+
+  /** Where the centreline starts, as a driving state. */
+  startState(): DriveState {
+    const p = this.curve.getPointAt(0);
+    const t = this.curve.getTangentAt(0);
+    return { x: p.x, z: p.z, h: Math.atan2(t.x, t.z), v: 0 };
+  }
+
+  /** Distance from the car to the nearest road centreline. */
+  distanceToRoad(x: number, z: number): number {
+    return this.world.distanceToRoad(x, z);
+  }
+
+  /** Draw one frame of free driving with a chase camera. */
+  driveTick(s: DriveState, dt: number): void {
+    const hero = this.cars[0];
+    if (!hero || !this.active) return;
+    hero.object.position.set(s.x, 0.02, s.z);
+    hero.object.rotation.set(0, s.h, 0);
+    hero.roll(s.v * dt * CAR_SCALE);
+    const fx = Math.sin(s.h);
+    const fz = Math.cos(s.h);
+    const want = new Vector3(s.x - fx * 1.1, 0.55, s.z - fz * 1.1);
+    this.chase.lerp(want, 1 - Math.exp(-Math.min(dt, 0.1) * 6));
+    this.camera.position.copy(this.chase);
+    this.camera.up.set(0, 1, 0);
+    this.camera.lookAt(s.x + fx * 0.6, 0.15, s.z + fz * 0.6);
+    const fov = 58 + Math.min(1, Math.abs(s.v) / 3.2) * 14;
+    if (Math.abs(fov - this.lastFov) > 0.01) {
+      this.camera.fov = fov;
+      this.camera.updateProjectionMatrix();
+      this.lastFov = fov;
+    }
+    this.focus.set(s.x, 0, s.z);
+    this.lighting.update(skyMood(this.driveSky), this.focus, this.camera.position.y);
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  /** Snap the chase camera behind the car (used when a drive starts). */
+  snapChase(s: DriveState): void {
+    this.chase.set(s.x - Math.sin(s.h) * 1.1, 0.55, s.z - Math.cos(s.h) * 1.1);
+  }
+
   setActive(active: boolean): void {
     this.active = active;
     if (active) this.dirty = true;
@@ -126,7 +182,7 @@ export class Stage {
 
   /** Advance and draw one frame. `dt` is in seconds. */
   tick(dt: number): void {
-    if (!this.active) return;
+    if (!this.active || this.driving) return;
     const delta = this.target - this.current;
     const settling = Math.abs(delta) > 1e-5;
     if (settling) this.current += delta * (this.calm ? 1 : 1 - Math.exp(-Math.min(dt, 0.1) * 9));
